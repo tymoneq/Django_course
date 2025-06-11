@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import Http404
 
 
 # Create your views here.
@@ -15,7 +15,7 @@ challenges = {
     "september": "Learn a new skill or hobby in September.",
     "october": "Write a daily journal entry for the month of October.",
     "november": "Volunteer for a local charity or community service in November.",
-    "december": "Reflect on the year and set goals for the next year in December.",
+    "december": None,
 }
 
 
@@ -35,9 +35,7 @@ def monthly_challenge_by_number(request, month):
     months = list(challenges.keys())
 
     if month < 1 or month > len(months):
-        return HttpResponse(
-            "<h1>Invalid month number. Please provide a number between 1 and 12.</h1>"
-        )
+        raise Http404()
 
     challenge_month = months[month - 1]
     # Redirect to the monthly challenge view with the month name
@@ -49,10 +47,13 @@ def monthly_challenge(request, month):
     """
     Render the monthly challenge page based on the month provided.
     """
-    challenge_text = challenges.get(month.lower(), "No challenge found for this month.")
 
-    return render(
-        request,
-        "challanges/challenge.html",
-        {"month": month, "challenge_text": challenge_text},
-    )
+    try:
+        challenge_text = challenges[month.lower()]
+        return render(
+            request,
+            "challanges/challenge.html",
+            {"month": month, "challenge_text": challenge_text},
+        )
+    except:
+        raise Http404()
