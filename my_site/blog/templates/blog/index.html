@@ -5,21 +5,17 @@
 
 
 {% block css_files %}
+<link rel="stylesheet" href="{% static 'blog/post.css' %}" />
 <link rel="stylesheet" href="{% static 'blog/index.css' %}" />
 {% endblock %} 
 
 {% block content %}
 
-<header id="main-navigation">
-  <h1><a href="">Tymon's Blog</a></h1>
-  <nav>
-    <a href="">All Posts</a>
-  </nav>
-</header>
+
 
 <section id="welcome">
   <header>
-    <img src="" alt="Tymon - ?The Author of this blog" />
+    <img src="{% static 'blog/images/max.png' %}" alt="Tymon - The Author of this blog" />
     <h2>Tymon's Blog</h2>
   </header>
 
@@ -30,23 +26,12 @@
   </p>
 </section>
 
-<section id="latest-post">
-  <h2>My Latest Post</h2>
+<section id="latest-posts">
+  <h2>My Latest Posts</h2>
   <ul>
-    <li>
-      <article class="post">
-        <a href=""></a>
-        <img src="" alt="Mountain Hiking" />
-        <div class="post__content">
-          <h3>Mountain Hiking: A Journey Through Nature</h3>
-          <p>
-            Join me as I explore the breathtaking trails of the Rocky Mountains,
-            sharing tips and experiences from my latest hiking adventure.
-          </p>
-          <p class="post__meta">Posted on: October 1, 2023</p>
-        </div>
-      </article>
-    </li>
+    {% for post in posts %}
+      {% include 'blog/include/post.html' %}
+    {% endfor %}
   </ul>
 </section>
 

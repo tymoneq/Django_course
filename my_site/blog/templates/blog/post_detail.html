@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+
+{% block title %}
+{{ identified_post.title }}
+{% endblock %}
+
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'blog/post-details.css' %}" />
+
+{% endblock %} 
+
+
+{% block content %}
+
+<section id="summary">
+  <h2>{{ identified_post.title }}</h2>
+  <article class="post">
+    <img src="{% static 'blog/images/'|add:identified_post.image %}" alt="{{ identified_post.title }}" />
+    <address>By {{ identified_post.author }}</address>
+    <div class="post__content">
+      <p class="post__meta">Posted on: {{ identified_post.date }}</p>
+    </div>
+  </article>
+
+  <main>
+    {{ identified_post.content|linebreaks }}
+  </main>
+
+
+{% endblock %}
