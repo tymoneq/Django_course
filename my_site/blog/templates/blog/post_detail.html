@@ -18,8 +18,15 @@
 
 <section id="summary">
   <h2>{{ identified_post.title }}</h2>
+
+  <h3> Tags </h3>
+      <ul>
+        {% for tag in tags %}
+          <li>{{ tag.caption }}</li>
+        {% endfor %}
+      </ul>
   <article class="post">
-    <img src="{% static 'blog/images/'|add:identified_post.image %}" alt="{{ identified_post.title }}" />
+    <img src="{% static 'blog/images/'|add:identified_post.image_name %}" alt="{{ identified_post.title }}" />
     <address>By {{ identified_post.author }}</address>
     <div class="post__content">
       <p class="post__meta">Posted on: {{ identified_post.date }}</p>
