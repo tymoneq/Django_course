@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Feedback</title>
-</head>
-<body>
-    <h1>Review Feedback</h1>
-    
-    <form method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button> Submit </button>
-    </form>
-</body>
-</html>
+{% extends 'reviews/base.html' %} 
+{% load static %} 
+
+{% block title %}
+Review Feedback
+{% endblock %} 
+
+{% block content %}
+<h1>Review Feedback</h1>
+
+<form method="POST">
+  {% csrf_token %} {% for field in form %}
+  <div class="form-control {% if field.errors %} errors {% endif %}">
+    {{ field.label_tag }} {{ field }} {{ field.errors }}
+  </div>
+  {% endfor %}
+
+  <button>Submit</button>
+</form>
+
+{% endblock %}
