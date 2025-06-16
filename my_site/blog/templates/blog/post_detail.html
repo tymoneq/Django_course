@@ -26,7 +26,7 @@
         {% endfor %}
       </ul>
   <article class="post">
-    <img src="{% static 'blog/images/'|add:identified_post.image_name %}" alt="{{ identified_post.title }}" />
+    <img src="{{ identified_post.image.url }}" alt="{{ identified_post.title }}" />
     <address>By {{ identified_post.author }}</address>
     <div class="post__content">
       <p class="post__meta">Posted on: {{ identified_post.date }}</p>
@@ -36,6 +36,40 @@
   <main>
     {{ identified_post.content|linebreaks }}
   </main>
+
+
+<section id="comments">
+  <ul> 
+{% for comment in comments %}
+    <li>
+      <p>{{ comment.name }}</p>
+      <blockquote>{{ comment.text }}</blockquote>
+    </li>
+{% endfor %}
+  </ul>
+
+
+    </section>
+
+    <section id="comments">
+      <h2>Your Comment</h2>
+      <form method="POST" action="{% url 'post_detail' identified_post.slug %}">
+        {% csrf_token %}
+        {% for element in comment_form %}
+          <div class="form-control">
+            {{ element.label_tag }}
+            {{ element }}
+            {% for error in element.errors %}
+              <p class="errorlist">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <button type="submit">Submit Comment</button>
+
+      </form>
+    </section>
+
+
 
 
 {% endblock %}

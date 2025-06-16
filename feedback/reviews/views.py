@@ -1,3 +1,6 @@
+import re
+from urllib import request
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import ReviewForm
 from .models import Review
@@ -22,42 +25,6 @@ class ReviewView(FormView):
         return self.render_to_response({"form": form})
 
 
-# def review(request):
-#     """
-#     Render the review page.
-#     """
-#     if request.method == "POST":
-#         form = ReviewForm(request.POST)
-#         if form.is_valid():
-#             # Process the form data
-
-#             form.save()
-
-#             # review = Review(
-#             #     username=form.cleaned_data["username"],
-#             #     review_text=form.cleaned_data["review_text"],
-#             #     rating=form.cleaned_data["rating"],
-#             # )
-#             # review.save()
-#             entered_username = form.cleaned_data["username"]
-#             # Here you can save the data to the database or perform other actions
-#             # Redirect to thank you page with the entered username
-#             return redirect("thank_you", entered_username=entered_username)
-
-#     else:
-#         form = ReviewForm()
-
-#     return render(request, "reviews/review.html", {"form": form})
-
-
-# def thank_you(request, entered_username):
-#     """
-#     Render the thank you page.
-#     """
-#     # This view can be used to display a thank you message after form submission
-#     return render(request, "reviews/thank_you.html", {"username": entered_username})
-
-
 class ThankYouView(TemplateView):
     template_name = "reviews/thank_you.html"
 
@@ -77,3 +44,19 @@ class SingleReviewView(DetailView):
     template_name = "reviews/single_review.html"
     model = Review
     context_object_name = "review"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        loaded_review = self.object
+        request = self.request
+        favorite_id = request.session.get("favorite_review")
+        context["is_favorite"] = favorite_id == str(loaded_review.id)
+
+        return context
+
+
+class AddFavoriteView(View):
+    def post(self, request, *args, **kwargs):
+        review_id = request.POST["review_id"]
+        request.session["favorite_review"] = review_id
+        return HttpResponseRedirect("/reviews/" + str(review_id))
