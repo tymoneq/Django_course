@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Stored Posts
+{% endblock %}
+
+{% block content %}
+<h1>Your Stored Posts</h1>
+<ul>
+{% if has_posts %}
+
+  {% for post in posts %}
+    <li><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></li>
+  {% endfor %}
+
+{% else %}
+    <li>No posts stored yet.</li>
+
+{% endif %}
+</ul>
+{% endblock %}
